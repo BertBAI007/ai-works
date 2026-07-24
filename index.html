@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Works — AI implementatie voor ondernemers</title>
+<meta name="description" content="AI vervangt geen mensen. Het vervangt bedrijven die er niet mee werken. Gebouwd door ondernemers, voor ondernemers.">
+<style>
+/* AI WORKS — style.css v1.1 (basis van JARVIS, gerepareerd + aangevuld) */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: #ffffff;
+  color: #1d1d1f;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+:root {
+  --white: #ffffff;
+  --off-white: #f5f5f7;
+  --black: #1d1d1f;
+  --gray: #6e6e73;
+  --light-gray: #e8e8ed;
+  --accent: #0071e3;
+}
+h1 { font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+h3 { font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 600; }
+p { font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.75; color: #3a3a3c; }
+.tagline { font-size: clamp(1.1rem,2vw,1.4rem); color: var(--gray); }
+.eyebrow { font-size: .85rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gray); }
+.container { max-width: 980px; margin: 0 auto; padding: 0 2rem; }
+.container--wide{ max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+section { padding: 120px 0; }
+section.hero { padding: 180px 0 140px; text-align: center; }
+section.alt { background: var(--off-white); }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px; display: flex; align-items: center;
+  background: rgba(255,255,255,.85);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+.nav-inner { display:flex; justify-content:space-between; align-items:center; width:100%; max-width:1200px; margin:0 auto; padding:0 2rem; }
+.nav-logo { font-size:.95rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--black); text-decoration:none; }
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a { font-size:.9rem; color:var(--black); text-decoration:none; opacity:.8; transition:opacity .2s; }
+.nav-links a:hover, .nav-links a.active { opacity:1; }
+.btn { display:inline-block; padding:.85rem 2rem; border-radius:980px; font-size:1rem; font-weight:500; text-decoration:none; transition:all .25s ease; border:none; cursor:pointer; }
+.btn--primary { background:var(--accent); color:#fff; }
+.btn--primary:hover { background:#0077ed; transform:scale(1.02); }
+.btn--secondary { background:transparent; color:var(--accent); border:1.5px solid var(--accent); }
+.btn--secondary:hover { background:var(--accent); color:#fff; transform:scale(1.02); }
+.card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem; margin-top:4rem; }
+.card { background:var(--white); border:1px solid var(--light-gray); border-radius:18px; padding:2.5rem; transition:transform .3s ease, box-shadow .3s ease; }
+.card:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(0,0,0,.08); }
+.form-group { margin-bottom:1.5rem; }
+.form-group label { display:block; font-size:.9rem; font-weight:500; margin-bottom:.5rem; }
+.form-group input, .form-group textarea { width:100%; padding:.85rem 1.2rem; border:1.5px solid var(--light-gray); border-radius:12px; font-size:1rem; font-family:inherit; outline:none; transition:border-color .2s; }
+.form-group input:focus, .form-group textarea:focus { border-color:var(--accent); }
+.form-group textarea { min-height:140px; resize:vertical; }
+footer { background:var(--black); color:rgba(255,255,255,.6); padding:60px 0; text-align:center; font-size:.85rem; }
+footer a { color:rgba(255,255,255,.6); text-decoration:none; }
+footer a:hover { color:#fff; }
+/* MOVEMENT */
+.fade-up { opacity:0; transform:translateY(40px); transition:opacity .7s ease, transform .7s ease; }
+.fade-in { opacity:0; transition:opacity .8s ease; }
+.slide-left { opacity:0; transform:translateX(-40px); transition:opacity .7s ease, transform .7s ease; }
+.slide-right { opacity:0; transform:translateX(40px); transition:opacity .7s ease, transform .7s ease; }
+.fade-up.visible, .fade-in.visible, .slide-left.visible, .slide-right.visible { opacity:1; transform:none; }
+.stagger > * { opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+.stagger > *:nth-child(1){ transition-delay:0s; }
+.stagger > *:nth-child(2){ transition-delay:.1s; }
+.stagger > *:nth-child(3){ transition-delay:.2s; }
+.stagger > *:nth-child(4){ transition-delay:.3s; }
+.stagger > *:nth-child(5){ transition-delay:.4s; }
+.stagger.visible > * { opacity:1; transform:none; }
+/* reduced motion: animaties respecteren de systeeminstelling */
+@media (prefers-reduced-motion: reduce){
+  .fade-up,.fade-in,.slide-left,.slide-right,.stagger > * { opacity:1; transform:none; transition:none; }
+}
+@media(max-width:768px){
+  section { padding:80px 0; }
+  section.hero { padding:120px 0 80px; }
+  .nav-links { display:none; }
+  .card-grid { grid-template-columns:1fr; }
+}
+
+/* ---- aanvullingen v1.1: stappen, split-layout, checklist, kleine hero ---- */
+section.hero--sub { padding: 150px 0 90px; text-align: center; }
+.step { display:flex; gap:2.5rem; align-items:flex-start; padding:3.5rem 0; border-bottom:1px solid var(--light-gray); }
+.step:last-of-type { border-bottom:none; }
+.step-num { font-size:1rem; font-weight:700; color:var(--accent); letter-spacing:.1em; flex:none; padding-top:.5rem; }
+.step h2 { font-size: clamp(1.5rem, 2.6vw, 2.2rem); margin-bottom:.8rem; }
+.split { display:grid; grid-template-columns:1.2fr .8fr; gap:4rem; align-items:start; }
+.checklist { list-style:none; margin-top:1.5rem; }
+.checklist li { position:relative; padding:.55rem 0 .55rem 2rem; font-size:1.05rem; line-height:1.6; color:#3a3a3c; }
+.checklist li::before { content:"—"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+.herocta { margin-top:2.5rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+.sectcta { margin-top:2.5rem; }
+.center { text-align:center; }
+.mt-2 { margin-top:2rem; }
+.footer-links { display:flex; gap:1.5rem; justify-content:center; margin:1rem 0; list-style:none; }
+@media(max-width:768px){
+  .split { grid-template-columns:1fr; gap:2.5rem; }
+  .step { flex-direction:column; gap:.8rem; padding:2.5rem 0; }
+}
+
+/* ---- v1.2: maximale beweging, minimal gehouden ---- */
+.hero .eyebrow, .hero h1, .hero .tagline, .hero .herocta {
+  opacity:0; transform:translateY(26px);
+  animation:heroIn .9s cubic-bezier(.16,1,.3,1) forwards; }
+.hero .eyebrow { animation-delay:.05s; }
+.hero h1      { animation-delay:.18s; }
+.hero .tagline{ animation-delay:.34s; }
+.hero .herocta{ animation-delay:.5s; }
+@keyframes heroIn { to { opacity:1; transform:none; } }
+.hero { position:relative; overflow:hidden; }
+.hero::before { content:""; position:absolute; left:50%; top:-220px; width:720px; height:720px;
+  transform:translateX(-50%); border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, rgba(0,113,227,.10), rgba(0,113,227,0) 62%);
+  animation:heroGlow 9s ease-in-out infinite alternate; }
+@keyframes heroGlow { from { transform:translateX(-56%) scale(1); } to { transform:translateX(-44%) scale(1.15); } }
+.hero > .container { position:relative; }
+nav { transition:height .3s ease, box-shadow .3s ease; }
+nav.scrolled { height:48px; box-shadow:0 6px 24px rgba(0,0,0,.06); }
+.card, .btn { will-change:transform; }
+@media (prefers-reduced-motion: reduce){
+  .hero .eyebrow,.hero h1,.hero .tagline,.hero .herocta { animation:none; opacity:1; transform:none; }
+  .hero::before { animation:none; }
+}
+
+/* onepager: ankernavigatie met vaste balk-compensatie */
+section[id] { scroll-margin-top: 72px; }
+
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="nav-logo" href="#top">AI Works</a>
+  <ul class="nav-links">
+    <li><a href="#over">Over</a></li>
+    <li><a href="#aanpak">Aanpak</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a class="btn btn--primary" style="padding:.5rem 1.3rem;font-size:.9rem" href="#contact">Gesprek aanvragen</a></li>
+  </ul>
+</div></nav>
+
+<section class="hero" id="top">
+  <div class="container">
+    <div class="eyebrow">AI implementatie voor ondernemers</div>
+    <h1>What if work finally worked for&nbsp;you?</h1>
+    <p class="tagline" style="margin-top:1.5rem">AI vervangt geen mensen. Het vervangt bedrijven die er niet mee werken.</p>
+    <div class="herocta">
+      <a class="btn btn--primary" href="#contact">Toon ons uw grootste bottleneck</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 0 40px">
+  <div class="container--wide fade-up">
+    <div style="position:relative;height:clamp(220px,36vw,420px);border-radius:28px;overflow:hidden;border:1px solid #e8e8ed;background:linear-gradient(135deg,#f2f7ff 0%,#e9f2fc 55%,#f4f1ff 100%)">
+      <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0071e3" stop-opacity=".55"/><stop offset="100%" stop-color="#0071e3" stop-opacity="0"/></radialGradient>
+          <radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7ab8ff" stop-opacity=".6"/><stop offset="100%" stop-color="#7ab8ff" stop-opacity="0"/></radialGradient>
+          <radialGradient id="g3" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#b28cff" stop-opacity=".45"/><stop offset="100%" stop-color="#b28cff" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="260" cy="210" r="260" fill="url(#g1)"><animate attributeName="cx" values="260;340;260" dur="11s" repeatCount="indefinite"/></circle>
+        <circle cx="700" cy="120" r="300" fill="url(#g2)"><animate attributeName="cy" values="120;220;120" dur="13s" repeatCount="indefinite"/></circle>
+        <circle cx="1000" cy="300" r="280" fill="url(#g3)"><animate attributeName="cx" values="1000;920;1000" dur="15s" repeatCount="indefinite"/></circle>
+        <g stroke="#0071e3" stroke-opacity=".35" fill="none">
+          <path d="M120 330 C 360 240, 560 300, 760 200 S 1080 130, 1160 170"><animate attributeName="d" values="M120 330 C 360 240, 560 300, 760 200 S 1080 130, 1160 170;M120 310 C 360 280, 560 260, 760 230 S 1080 170, 1160 150;M120 330 C 360 240, 560 300, 760 200 S 1080 130, 1160 170" dur="12s" repeatCount="indefinite"/></path>
+        </g>
+        <g fill="#0071e3">
+          <circle cx="300" cy="270" r="4" fill-opacity=".55"><animate attributeName="cy" values="270;250;270" dur="7s" repeatCount="indefinite"/></circle>
+          <circle cx="620" cy="240" r="5" fill-opacity=".4"><animate attributeName="cy" values="240;265;240" dur="9s" repeatCount="indefinite"/></circle>
+          <circle cx="900" cy="200" r="4" fill-opacity=".5"><animate attributeName="cy" values="200;180;200" dur="8s" repeatCount="indefinite"/></circle>
+        </g>
+        <text x="600" y="392" text-anchor="middle" font-family="-apple-system,Helvetica,Arial" font-size="15" fill="#6e6e73" letter-spacing="3">WERK DAT STROOMT</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="over">
+  <div class="container">
+    <div class="eyebrow fade-up">Het verhaal</div>
+    <h2 class="fade-up">Gebouwd uit noodzaak.<br>Bewezen in de praktijk.</h2>
+    <p class="fade-up mt-2" style="margin-top:2rem">Ergens in uw organisatie wacht een proces op een mens. Niet omdat het zo ontworpen is. Maar omdat het zo gegroeid is. Iemand die de context kent, de uitzonderingen begrijpt, de juiste mensen kent. Onmisbaar geworden, niet door keuze maar door gewenning.</p>
+    <p class="fade-up mt-2">Dat is waar organisaties kwetsbaar worden. Niet bij de grote strategische beslissingen, maar in de dagelijkse stroom van opvolging, goedkeuring en escalatie die altijd ergens op iemand wacht.</p>
+    <p class="fade-up mt-2"><b>Ik weet dit omdat ik het zelf was.</b></p>
+    <p class="fade-up mt-2">Meerdere bedrijven. Meer dan honderd medewerkers. Honderden woningen in ontwikkeling. Tientallen aannemers, architecten, overheden en kopers die allemaal tegelijk op beslissingen wachten. Van grondaankoop tot oplevering &mdash; elke dag opnieuw, in &eacute;&eacute;n van de meest complexe, mensafhankelijke sectoren die er bestaat. En toch was ik zelf de flessenhals.</p>
+    <p class="fade-up mt-2">Acht maanden geleden begon ik een AI-systeem te bouwen. Niet als experiment. Niet omdat AI de nieuwste trend was. Uit noodzaak.</p>
+    <p class="fade-up mt-2"><b>Als AI werkt in vastgoed, werkt het overal.</b></p>
+    <p class="fade-up mt-2">Vandaag beheert dat systeem onze mailboxen, onze financi&euml;n, onze projecten, onze contracten en onze planning. Maar de grootste impact was niet technologisch.</p>
+    <p class="fade-up mt-2"><b>We waren weer aanwezig. Niet alleen op het werk.</b></p>
+    <p class="fade-up mt-2">En onze teams veranderden mee: minder achtervolgen, minder brandjes blussen, minder wachten op beslissingen. Meer eigenaarschap, meer focus, meer tijd voor werk dat &eacute;cht waarde cre&euml;ert.</p>
+    <p class="fade-up mt-2">Dit is geen verhaal over de toekomst van AI. Het is over wat u vandaag kan bouwen, hoe snel het de manier waarop uw organisatie werkt kan veranderen &mdash; en wat dat kan betekenen voor de manier waarop u werkt, leidt en leeft.</p>
+  </div>
+</section>
+
+<section id="aanpak">
+  <div class="container--wide">
+    <div class="center">
+      <div class="eyebrow fade-up">Hoe wij werken</div>
+      <h2 class="fade-up">E&eacute;n proces. Meetbaar resultaat.<br>Dan het volgende.</h2>
+    </div>
+    <div class="card-grid stagger">
+      <div class="card">
+        <div class="step-num">01</div>
+        <h3 style="margin-top:.6rem">Waar loopt uw organisatie vast?</h3>
+        <p style="margin-top:.8rem">We beginnen niet met een presentatie of een stapel vragenlijsten. We beginnen met &eacute;&eacute;n gesprek &mdash; een echte analyse van waar uw organisatie tijd, energie of geld verliest. Gratis en vrijblijvend. Altijd.</p>
+      </div>
+      <div class="card">
+        <div class="step-num">02</div>
+        <h3 style="margin-top:.6rem">Een oplossing die past in uw organisatie.</h3>
+        <p style="margin-top:.8rem">Geen generieke tool die u moet aanpassen aan het systeem. Een AI-oplossing gebouwd rond uw processen, uw data en uw mensen. We ontwerpen samen, zodat uw team begrijpt wat er gebouwd wordt en waarom.</p>
+      </div>
+      <div class="card">
+        <div class="step-num">03</div>
+        <h3 style="margin-top:.6rem">Transparant, schaalbaar, van u.</h3>
+        <p style="margin-top:.8rem">We bouwen in uw systemen. Geen black box, geen eeuwige licentie, geen afhankelijkheid. Wat we bouwen is volledig van u &mdash; uw team kan het beheren, aanpassen en uitbreiden zonder ons.</p>
+      </div>
+      <div class="card">
+        <div class="step-num">04</div>
+        <h3 style="margin-top:.6rem">Eerst meten. Dan opschalen.</h3>
+        <p style="margin-top:.8rem">Pas als het eerste proces meetbaar beter werkt, gaan we verder. We defini&euml;ren vooraf wat succes betekent en meten het daarna. Geen vaag gevoel van verbetering &mdash; concrete cijfers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="compliance">
+  <div class="container">
+    <div class="split">
+      <div class="slide-left">
+        <div class="eyebrow">Vertrouwen als fundament</div>
+        <h2>U opent uw organisatie.<br>Wij bewaken ze.</h2>
+        <p style="margin-top:1.5rem">AI implementeren betekent dat iemand uw processen, uw data en uw werking van dichtbij leert kennen. Dat vereist vertrouwen. En dat vertrouwen verdienen we concreet.</p>
+      </div>
+      <div class="slide-right">
+        <div class="fade-in" style="margin-bottom:1.6rem">
+  <svg viewBox="0 0 120 120" width="84" height="84" aria-hidden="true">
+    <circle cx="60" cy="60" r="46" fill="none" stroke="#0071e3" stroke-opacity=".25" stroke-width="2"/>
+    <circle cx="60" cy="60" r="46" fill="none" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round"
+      stroke-dasharray="70 220"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="9s" repeatCount="indefinite"/></circle>
+    <path d="M60 38 L78 46 V62 C78 76 70 84 60 88 C50 84 42 76 42 62 V46 Z" fill="none" stroke="#1d1d1f" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M52 62 L58 68 L70 54" fill="none" stroke="#0071e3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
+        <ul class="checklist stagger">
+          <li><b>Vertrouwelijkheid</b> &mdash; Wat wij zien, blijft bij u. Geen data die ons systeem voedt, geen gedeelde modellen tussen klanten. Uw bedrijfsdata is van u, altijd.</li>
+          <li><b>GDPR by design</b> &mdash; Niet als checkbox achteraf. Verwerkersovereenkomst, dataminimalisatie en toegangsbeheer zijn standaard onderdeel van elke implementatie.</li>
+          <li><b>Geen lock-in</b> &mdash; Wat we bouwen is van u. Geen eeuwige licentie, geen afhankelijkheid van ons platform. U beheert zelf verder. We documenteren alles zo dat u morgen zonder ons verder kan.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="center">
+  <div class="container fade-in">
+    <h2>Uw concurrenten implementeren AI.<br>U leest er nog over na.</h2>
+    <p style="margin-top:1.5rem"><b>AI WORKS bouwt het. Niet in theorie. In uw organisatie. Deze maand.</b><br>E&eacute;n proces. Meetbaar resultaat. Dan het volgende.<br>AI WORKS. Letterlijk.</p>
+  </div>
+</section>
+
+<section class="alt" id="contact">
+  <div class="container--wide">
+    <div class="center" style="margin-bottom:3rem">
+      <div class="eyebrow fade-up">Gesprek aanvragen</div>
+      <h2 class="fade-up">Toon ons het proces waar uw organisatie op vastloopt.</h2>
+      <p class="tagline fade-up" style="margin-top:1rem">Wij bouwen de oplossing. Het eerste gesprek is gratis en vrijblijvend.</p>
+    </div>
+    <div class="split">
+      <form id="cform" class="fade-up" novalidate>
+        <div class="form-group"><label for="f-naam">Naam</label><input id="f-naam" type="text" required></div>
+        <div class="form-group"><label for="f-bedrijf">Bedrijf</label><input id="f-bedrijf" type="text"></div>
+        <div class="form-group"><label for="f-email">E-mailadres</label><input id="f-email" type="email" required></div>
+        <div class="form-group"><label for="f-tel">Telefoonnummer (optioneel)</label><input id="f-tel" type="tel"></div>
+        <div class="form-group"><label for="f-msg">Wat is het proces of de uitdaging waar u mee worstelt?</label><textarea id="f-msg" required></textarea></div>
+        <button class="btn btn--primary" type="submit">Verstuur</button>
+        <p id="cformnote" style="font-size:.85rem;color:var(--gray);margin-top:1rem;display:none">Uw mailprogramma opent met het ingevulde bericht &mdash; verzenden gebeurt vanuit uw eigen mailbox.</p>
+      </form>
+      <div class="slide-right">
+        <div class="eyebrow">Wat u kan verwachten</div>
+        <ul class="checklist stagger" style="margin-top:1.2rem">
+          <li>Reactie binnen &eacute;&eacute;n werkdag.</li>
+          <li>Een gesprek van maximaal een uur, zonder verkooppitch.</li>
+          <li>Een eerlijk advies, ook als AI niet de oplossing is.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="container">
+  <div style="font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff">AI Works</div>
+  <ul class="footer-links">
+    <li><a href="#over">Over</a></li>
+    <li><a href="#aanpak">Aanpak</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div>&copy; 2026 AI Works &mdash; ai-works.be &middot; Alle rechten voorbehouden</div>
+</div></footer>
+<script>
+// AI WORKS — scroll-animaties (IntersectionObserver, licht en dependency-vrij)
+(function(){
+  var els = document.querySelectorAll('.fade-up, .fade-in, .slide-left, .slide-right, .stagger');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('visible'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(function(e){ io.observe(e); });
+})();
+
+// nav krimpt subtiel zodra je scrolt + zachte parallax op de hero-gloed
+(function(){
+  var nv=document.querySelector('nav');
+  window.addEventListener('scroll', function(){
+    if(nv) nv.classList.toggle('scrolled', window.scrollY>24);
+  }, {passive:true});
+})();
+
+document.getElementById('cform').addEventListener('submit', function(e){
+  e.preventDefault();
+  var v=function(id){ return (document.getElementById(id)||{}).value||''; };
+  var body='Naam: '+v('f-naam')+'\nBedrijf: '+v('f-bedrijf')+'\nE-mail: '+v('f-email')+'\nTelefoon: '+v('f-tel')+'\n\n'+v('f-msg');
+  location.href='mailto:bert@re4m.be?cc=gert@heroconstruct.be&subject='+encodeURIComponent('Gesprek aanvragen — '+(v('f-bedrijf')||v('f-naam')))+'&body='+encodeURIComponent(body);
+  var n=document.getElementById('cformnote'); if(n) n.style.display='block';
+});
+</script>
+</body>
+</html>
