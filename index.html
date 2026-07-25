@@ -329,7 +329,7 @@ section[id] { scroll-margin-top: 72px; }
       <p style="margin-top:.7rem"><b>Gert Lelie</b> &mdash;
         <a href="tel:+32477753328" style="color:var(--accent);text-decoration:none">+32 477 75 33 28</a>
         &nbsp;&middot;&nbsp;
-        <a href="mailto:gert@heroconstruct.be" style="color:var(--accent);text-decoration:none">gert@heroconstruct.be</a></p>
+        <a href="mailto:gert@ai-works.be" style="color:var(--accent);text-decoration:none">gert@ai-works.be</a></p>
     </div>
   </div>
 </section>
@@ -369,7 +369,7 @@ document.getElementById('cform').addEventListener('submit', function(e){
   e.preventDefault();
   var v=function(id){ return (document.getElementById(id)||{}).value||''; };
   var body='Naam: '+v('f-naam')+'\nBedrijf: '+v('f-bedrijf')+'\nE-mail: '+v('f-email')+'\nTelefoon: '+v('f-tel')+'\n\n'+v('f-msg');
-  location.href='mailto:bert@re4m.be?cc=gert@heroconstruct.be&subject='+encodeURIComponent('Gesprek aanvragen — '+(v('f-bedrijf')||v('f-naam')))+'&body='+encodeURIComponent(body);
+  location.href='mailto:bert@re4m.be?cc=gert@ai-works.be&subject='+encodeURIComponent('Gesprek aanvragen — '+(v('f-bedrijf')||v('f-naam')))+'&body='+encodeURIComponent(body);
   var n=document.getElementById('cformnote'); if(n) n.style.display='block';
 });
 </script>
