@@ -2,8 +2,8 @@
 <defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#2b8fef"/><stop offset="1" stop-color="#0071e3"/></linearGradient></defs>
 <circle cx="120" cy="118" r="98" fill="none" stroke="#0071e3" stroke-opacity=".16" stroke-width="3"/>
-<circle cx="120" cy="118" r="98" fill="none" stroke="url(#lb)" stroke-width="4" stroke-linecap="round" stroke-dasharray="58 560"/>
-<g fill="none" stroke="url(#lb)" stroke-width="8" stroke-linecap="round">
+<circle cx="120" cy="118" r="98" fill="none" stroke="#0071e3" stroke-width="4" stroke-linecap="round" stroke-dasharray="58 560"/>
+<g fill="none" stroke="#0071e3" stroke-width="8" stroke-linecap="round">
   <path d="M120 54 C 101 44, 78 50, 71 68 C 56 70, 50 88, 59 100 C 50 112, 56 130, 71 134 C 76 149, 96 155, 109 147"/>
   <path d="M120 54 C 139 44, 162 50, 169 68 C 184 70, 190 88, 181 100 C 190 112, 184 130, 169 134 C 164 149, 144 155, 131 147"/>
 </g>
