@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120">
+<g transform="translate(8,0)"><g fill="none" stroke="#0071e3" stroke-width="7" stroke-linecap="round">
+  <path d="M60 22 C 46 15, 29 19, 24 32 C 13 34, 9 47, 15 56 C 9 65, 13 78, 24 81 C 27 92, 42 97, 52 91"/>
+  <path d="M60 22 C 74 15, 91 19, 96 32 C 107 34, 111 47, 105 56 C 111 65, 107 78, 96 81 C 93 92, 78 97, 68 91"/>
+</g>
+<g stroke="#0071e3" stroke-opacity=".55" stroke-width="3" fill="none">
+  <path d="M38 44 L 54 54 L 46 72"/><path d="M54 54 L 66 46 L 78 56"/><path d="M82 42 L 78 56 L 74 72"/><path d="M46 72 L 60 66 L 74 72"/>
+</g>
+<g fill="#0071e3">
+  <circle cx="38" cy="44" r="6"/><circle cx="54" cy="54" r="5.5"/><circle cx="66" cy="46" r="6"/>
+  <circle cx="82" cy="42" r="5.5"/><circle cx="46" cy="72" r="5.5"/><circle cx="60" cy="66" r="6.5"/><circle cx="74" cy="72" r="5.5"/>
+</g></g>
+<text x="146" y="79" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="56" font-weight="800" letter-spacing="1" fill="#1d1d1f">AI&#8202;WORKS</text>
+</svg>
