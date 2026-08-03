@@ -326,12 +326,6 @@ section[id] { scroll-margin-top: 72px; }
         </ul>
       </div>
     </div>
-    <div class="fade-up" style="margin-top:3.5rem;text-align:center">
-      <div class="eyebrow">Rechtstreeks contact</div>
-      <p style="margin-top:.7rem"><b>Gert Lelie</b></p>
-      <p style="margin-top:.35rem"><a href="tel:+32477753328" style="color:var(--accent);text-decoration:none;white-space:nowrap">+32 477 75 33 28</a></p>
-      <p style="margin-top:.35rem"><a href="mailto:gert@aithatworks.be" style="color:var(--accent);text-decoration:none;white-space:nowrap">gert@aithatworks.be</a></p>
-    </div>
   </div>
 </section>
 
@@ -370,7 +364,7 @@ document.getElementById('cform').addEventListener('submit', function(e){
   e.preventDefault();
   var v=function(id){ return (document.getElementById(id)||{}).value||''; };
   var body='Naam: '+v('f-naam')+'\nBedrijf: '+v('f-bedrijf')+'\nE-mail: '+v('f-email')+'\nTelefoon: '+v('f-tel')+'\n\n'+v('f-msg');
-  location.href='mailto:bert@re4m.be?cc=gert@aithatworks.be&subject='+encodeURIComponent('Gesprek aanvragen — '+(v('f-bedrijf')||v('f-naam')))+'&body='+encodeURIComponent(body);
+  location.href='mailto:bert.belon@re4m.be?subject='+encodeURIComponent('Gesprek aanvragen — '+(v('f-bedrijf')||v('f-naam')))+'&body='+encodeURIComponent(body);
   var n=document.getElementById('cformnote'); if(n) n.style.display='block';
 });
 </script>
